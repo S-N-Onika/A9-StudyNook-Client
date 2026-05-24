@@ -1,5 +1,6 @@
 "use client";
 
+import Events from "@/components/Events";
 import Stats from "@/components/Stats";
 import dynamic from 'next/dynamic';
 
@@ -13,6 +14,7 @@ export default function Home() {
     <div className="flex flex-col min-h-screen">
       <Banner />
       <Stats />
+      <Events />
     </div>
 
   );
