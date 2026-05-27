@@ -24,7 +24,7 @@ export default function Navbar() {
                         <Link href="/" className="">
                             Home
                         </Link>
-                        <Link href="/rooms" className="">
+                        <Link href="/all-rooms" className="">
                             Rooms
                         
                         </Link>
