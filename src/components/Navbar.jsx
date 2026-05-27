@@ -28,7 +28,7 @@ export default function Navbar() {
                             Rooms
                         
                         </Link>
-                        <Link href="/add-rooms" className="">
+                        <Link href="/add-room" className="">
                             Add Room
                         </Link>
                         <Link href="/my-listings" className="">
