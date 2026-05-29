@@ -13,7 +13,7 @@ export default function LatestRooms() {
 
     useEffect(() => {
         axios
-            .get("http://localhost:5000/api/rooms")
+            .get("http://localhost:5000/api/all-rooms")
             .then((res) => {
                 setLatestRooms(res.data);
                 setLoading(false);
@@ -39,7 +39,7 @@ export default function LatestRooms() {
                 </div>
 
                 <Link
-                    href="/rooms"
+                    href="/all-rooms"
                     className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-[#5C2E16] hover:text-[#C29B38] transition-colors group"
                 >
                     <span>View All Rooms</span>
@@ -144,7 +144,7 @@ export default function LatestRooms() {
                                     </div>
 
                                     <Link
-                                        href={`/rooms/${room._id}`}
+                                        href={`/all-rooms/${room._id}`}
                                         className="block w-full py-3 text-center text-xs uppercase tracking-widest font-bold text-[#5C2E16] bg-[#FBF8F3] hover:bg-[#5C2E16] hover:text-white rounded border border-[#EADFC9] transition-all cursor-pointer"
                                     >
                                         View Details

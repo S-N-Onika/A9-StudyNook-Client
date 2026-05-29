@@ -1,7 +1,6 @@
 "use client";
 
-import { useForm } from "react-hook-form";
-import { useContext, useEffect } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import {LuCirclePlus, LuLayers, LuUsers, LuDollarSign, LuHeading, LuImage, LuTextQuote,} from "react-icons/lu";
 import axios from "axios";
@@ -10,24 +9,30 @@ import toast from "react-hot-toast";
 const AVAILABLE_AMENITIES = [ "Whiteboard", "Projector", "Wi-Fi", "Power Outlets", "Quiet Zone", "Air Conditioning", ];
  
 export default function AddRoom() {
-    // const { user } = useContext(AuthContext);
-
     const router = useRouter();
-
-    const {
-        register,
-        handleSubmit,
-        formState: { errors },
-    } = useForm();
 
     useEffect(() => {
         document.title = "StudyNook - Add Study Rooms";
     }, []);
 
-    const onSubmit = async (data) => {
-        const clearToastId = toast.loading(
-            "Publishing study room properties..."
-        );
+        const onSubmit = async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.currentTarget);
+            const rooms = { ...Object.fromEntries(formData.entries()),
+                amenities: formData.getAll("amenities") };
+            const clearToastId = toast.loading(
+                "Publishing study room properties..."
+            );
+
+            const res = await fetch("http://localhost:5000/api/all-rooms", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(rooms),
+            });
+
+            const data = await res.json();
 
         const payload = {
             name: data.name,
@@ -42,24 +47,24 @@ export default function AddRoom() {
 
         try {
             await axios.post(
-                "http://localhost:5000/api/rooms",
+                "http://localhost:5000/api/all-rooms",
                 payload,
                 {
                     withCredentials: true,
                 }
             );
 
-            toast.success("Study room registered successfully!", {
+            toast.success("Study room listed successfully!", {
                 id: clearToastId,
             });
 
-            router.push("/rooms");
+            router.push("/all-rooms");
         } catch (err) {
             console.error(err);
 
             toast.error(
                 err.response?.data?.message ||
-                "Failed to list study chamber.",
+                "Failed to list study Room.",
                 {
                     id: clearToastId,
                 }
@@ -73,7 +78,7 @@ export default function AddRoom() {
 
                 <div className="mb-8 text-center md:text-left border-b border-[#EADFC9] pb-5">
                     <h2 className="text-3xl font-serif font-black text-[#2E1A0F] tracking-tight mb-1">
-                        List Study Chamber
+                        List Study Room
                     </h2>
 
                     <p className="text-sm text-stone-500 font-medium">
@@ -83,16 +88,16 @@ export default function AddRoom() {
                 </div>
 
                 <form
-                    onSubmit={handleSubmit(onSubmit)}
+                    onSubmit={onSubmit}
                     className="space-y-5"
-                    autoComplete="off"
+                    autoComplete="on"
                 >
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
 
                         <div>
                             <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">
-                                Chamber Title
+                                Room Title
                             </label>
 
                             <div className="relative w-full rounded border border-[#EADFC9] bg-[#FBF8F3] focus-within:bg-white transition-colors">
@@ -100,19 +105,12 @@ export default function AddRoom() {
 
                                 <input
                                     type="text"
-                                    {...register("name", {
-                                        required: true,
-                                    })}
+                                    name="name"
+                                    required
                                     className="w-full pl-9 pr-4 py-2.5 bg-transparent text-sm text-[#2E1A0F] focus:outline-none relative z-20"
                                     placeholder="e.g. Oakwood Vault Room"
                                 />
                             </div>
-
-                            {errors.name && (
-                                <span className="text-xs font-bold text-rose-600 mt-1 block">
-                                    Title parameter is required.
-                                </span>
-                            )}
                         </div>
 
                         <div>
@@ -125,19 +123,12 @@ export default function AddRoom() {
 
                                 <input
                                     type="url"
-                                    {...register("image", {
-                                        required: true,
-                                    })}
+                                    name="image"
+                                    required
                                     className="w-full pl-9 pr-4 py-2.5 bg-transparent text-sm text-[#2E1A0F] focus:outline-none relative z-20"
                                     placeholder="https://unsplash.com..."
                                 />
                             </div>
-
-                            {errors.image && (
-                                <span className="text-xs font-bold text-rose-600 mt-1 block">
-                                    Valid image URL is required.
-                                </span>
-                            )}
                         </div>
                     </div>
 
@@ -151,19 +142,12 @@ export default function AddRoom() {
 
                             <input
                                 type="text"
-                                {...register("floor", {
-                                    required: true,
-                                })}
+                                name="floor"
+                                required
                                 className="w-full pl-9 pr-4 py-2.5 bg-transparent text-sm text-[#2E1A0F] focus:outline-none relative z-20"
                                 placeholder="e.g. Floor 3, West Wing B"
                             />
                         </div>
-
-                        {errors.floor && (
-                            <span className="text-xs font-bold text-rose-600 mt-1 block">
-                                Floor description is required.
-                            </span>
-                        )}
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
@@ -178,20 +162,12 @@ export default function AddRoom() {
 
                                 <input
                                     type="number"
-                                    {...register("capacity", {
-                                        required: true,
-                                        min: 1,
-                                    })}
+                                    name="capacity"
+                                    required
                                     className="w-full pl-9 pr-4 py-2.5 rounded border border-[#EADFC9] bg-[#FBF8F3] text-sm text-[#2E1A0F] focus:bg-white focus:outline-none transition-colors"
                                     placeholder="e.g. 4"
                                 />
                             </div>
-
-                            {errors.capacity && (
-                                <span className="text-xs font-bold text-rose-600 mt-1 block">
-                                    Must be at least 1 person.
-                                </span>
-                            )}
                         </div>
 
                         <div>
@@ -205,36 +181,18 @@ export default function AddRoom() {
                                 <input
                                     type="number"
                                     step="0.01"
-                                    {...register("hourlyRate", {
-                                        required:
-                                            "Valid hourly rate is required.",
-                                        min: {
-                                            value: 1,
-                                            message:
-                                                "Minimum fee must be $1/hr.",
-                                        },
-                                        max: {
-                                            value: 100,
-                                            message:
-                                                "Maximum fee cannot exceed $100/hr.",
-                                        },
-                                    })}
+                                    name="hourlyRate"
+                                    required
                                     className="w-full pl-9 pr-4 py-2.5 bg-transparent text-sm text-[#2E1A0F] focus:outline-none relative z-20"
-                                    placeholder="e.g. 5.50"
+                                    placeholder="e.g. 15.00"
                                 />
                             </div>
-
-                            {errors.hourlyRate && (
-                                <span className="text-xs font-bold text-rose-600 mt-1 block">
-                                    {errors.hourlyRate.message}
-                                </span>
-                            )}
                         </div>
                     </div>
 
                     <div>
                         <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">
-                            Detailed Chamber Description
+                            Detailed Room Description
                         </label>
 
                         <div className="relative">
@@ -242,19 +200,12 @@ export default function AddRoom() {
 
                             <textarea
                                 rows={4}
-                                {...register("description", {
-                                    required: true,
-                                })}
+                                name="description"
+                                required
                                 className="w-full pl-9 pr-4 py-2.5 rounded border border-[#EADFC9] bg-[#FBF8F3] text-sm text-[#2E1A0F] focus:bg-white focus:outline-none transition-colors resize-none"
                                 placeholder="Elaborate on ambient acoustic parameters, general rules..."
                             />
                         </div>
-
-                        {errors.description && (
-                            <span className="text-xs font-bold text-rose-600 mt-1 block">
-                                Description summary is required.
-                            </span>
-                        )}
                     </div>
 
                     <div>
@@ -271,7 +222,7 @@ export default function AddRoom() {
                                     <input
                                         type="checkbox"
                                         value={amenity}
-                                        {...register("amenities")}
+                                        name="amenities"
                                         className="w-4 h-4 text-[#C29B38] accent-[#C29B38] border-stone-300 focus:ring-0 rounded cursor-pointer checked:bg-[#C29B38] checked:border-[#C29B38]"
                                     />
 
