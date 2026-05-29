@@ -1,177 +1,224 @@
 "use client";
 
-import Link from "next/link";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useState, useEffect } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { authClient } from "@/lib/auth-client";
+import toast from "react-hot-toast";
+import { LuEye, LuEyeOff } from "react-icons/lu";
+import { LuUserPlus, LuShieldAlert } from "react-icons/lu";
 import { FcGoogle } from "react-icons/fc";
-import { FiEye, FiEyeOff } from "react-icons/fi";
-import toast, { Toaster } from "react-hot-toast";
-// import { authClient } from "@/lib/auth-client";
-// import "animate.css";
 
 export default function RegisterPage() {
     const router = useRouter();
     const [showPassword, setShowPassword] = useState(false);
-    const [loading, setLoading] = useState(false);
+    const [validationError, setValidationError] = useState("");
 
     const {
         register,
         handleSubmit,
-        reset,
         formState: { errors },
     } = useForm();
 
-    const onSubmit = async (data) => {
-        const { name, email, password, photo } = data;
-        setLoading(true);
+    useEffect(() => {
+        document.title = "StudyNook - Register";
+    }, []);
 
-        await authClient.signUp.email(
-            {
-                email: email.trim().toLowerCase(),
-                password,
-                name: name.trim(),
-                image: photo?.trim() || undefined,
-                callbackURL: "/",
-            },
-            {
+    const onSubmit = async (data = any) => {
+        setValidationError("");
+        const { name, email, photoURL, password } = data;
+
+        if (password.length < 6) {
+            setValidationError("Criteria failed: Password must consist of at least 6 characters.");
+            toast.error("Password too short.");
+            return;
+        }
+        if (!/[A-Z]/.test(password)) {
+            setValidationError("Criteria failed: Password must include at least one uppercase letter.");
+            toast.error("Uppercase letter required.");
+            return;
+        }
+        if (!/[a-z]/.test(password)) {
+            setValidationError("Criteria failed: Password must include at least one lowercase letter.");
+            toast.error("Lowercase letter required.");
+            return;
+        }
+
+        await authClient.signUp.email({
+            email,
+            password,
+            name,
+            image: photoURL, 
+            fetchOptions: {
+                onRequest: () => {
+                    setValidationError("");
+                },
                 onSuccess: () => {
-                    toast.success("Account created successfully!");
-                    setLoading(false);
-                    reset();
+                    toast.success("Registration successful! Redirecting...");
                     router.push("/login");
                 },
                 onError: (ctx) => {
-                    toast.error(ctx.error.message || "Registration failed");
-                    setLoading(false);
+                    setValidationError(ctx.error.message || "Registration process encountered an error.");
+                    toast.error("Registration failed.");
                 },
-            }
-        );
+            },
+        });
     };
 
-    const handleGoogleLogin = async () => {
-        setLoading(true);
-        await authClient.signIn.social(
-            {
+    const handleGoogleRegister = async () => {
+        setValidationError("");
+        try {
+            await authClient.signIn.social({
                 provider: "google",
-                callbackURL: "/",
-            },
-            {
-                onError: (ctx) => {
-                    toast.error(ctx.error.message || "Google Sign-in failed");
-                    setLoading(false);
-                },
-                onSuccess: () => setLoading(false),
-            }
-        );
+                callbackURL: "/", 
+            });
+        } catch (err) {
+            toast.error("Google authentication encountered an error.");
+        }
     };
 
     return (
-        <main className="bg-[#FCF9F3] min-h-screen flex items-center justify-center px-4 py-12">
-            <Toaster position="top-center" />
+        <div className="w-full min-h-full flex items-center justify-center bg-[#FBF8F3] p-4 sm:p-6 lg:p-12 pt-10">
 
-            <div className="bg-white w-full max-w-lg p-8 md:p-12 rounded-[2.5rem] shadow-2xl border border-green-100 animate__animated animate__fadeIn">
+            <div className="bg-white rounded border border-[#EADFC9] max-w-3xl w-full min-h-[580px] md:h-[75vh] grid grid-cols-1 md:grid-cols-2 overflow-hidden shadow-sm">
 
-                <div className="text-center mb-10">
-                    <h2 className="text-4xl font-black text-green-900">Create Account</h2>
-                    <p className="text-gray-500 mt-2">Join the QurbaniHat community today</p>
+                <div className="hidden md:block relative bg-[#2C1A11] h-full w-full overflow-hidden">
+                    <div
+                        className="absolute inset-0 bg-cover bg-center opacity-25 mix-blend-luminosity scale-105"
+                        style={{ backgroundImage: "url('/assets/books.avif')" }}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#2C1A11] via-transparent to-transparent z-10" />
+                    <div className="absolute bottom-12 left-10 right-10 z-20 text-white space-y-2">
+                        <p className="font-serif italic text-2xl lg:text-3xl text-[#C29B38] leading-relaxed">
+                            "A room without books is like a body without a soul."
+                        </p>
+                        <p className="text-xs lg:text-sm font-bold uppercase tracking-widest text-stone-400">
+                            — Marcus Tullius Cicero
+                        </p>
+                    </div>
                 </div>
 
-                <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-                    <div>
-                        <input
-                            {...register("name", { required: "Full name is required" })}
-                            type="text"
-                            placeholder="Full Name"
-                            className={`input ${errors.name ? "border-red-500" : ""}`}
-                        />
-                        {errors.name && <p className="text-red-500 text-xs mt-1 ml-2">{errors.name.message}</p>}
+                <div className="p-6 sm:p-10 md:p-12 lg:p-14 flex flex-col justify-center w-full h-full overflow-y-auto">
+
+                    <div className="mb-5 text-left">
+                        <h2 className="text-2xl sm:text-4xl font-serif font-black text-[#2E1A0F] tracking-tight mb-0.5 sm:mb-1">
+                            Create Account
+                        </h2>
+                        <p className="text-[10px] sm:text-xs font-bold uppercase tracking-widest text-[#C29B38]">
+                            Join the library study network
+                        </p>
                     </div>
 
-                    <div>
-                        <input
-                            {...register("email", {
-                                required: "Email is required",
-                                pattern: { value: /^\S+@\S+$/i, message: "Invalid email format" }
-                            })}
-                            type="email"
-                            placeholder="Email"
-                            className={`input ${errors.email ? "border-red-500" : ""}`}
-                        />
-                        {errors.email && <p className="text-red-500 text-xs mt-1 ml-2">{errors.email.message}</p>}
-                    </div>
+                    {validationError && (
+                        <div className="flex items-center gap-2 p-3 mb-4 bg-rose-50 border border-rose-200 text-rose-800 rounded text-xs font-semibold animate-fadeIn w-full">
+                            <LuShieldAlert className="w-4 h-4 shrink-0" />
+                            <span className="text-left leading-tight">{validationError}</span>
+                        </div>
+                    )}
 
-                    <input {...register("photo")} type="text" placeholder="Photo URL (Optional)" className="input" />
+                    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+                        <div>
+                            <label className="block text-[10px] font-bold text-stone-600 uppercase tracking-wider mb-1">Full Name</label>
+                            <input
+                                type="text"
+                                {...register("name", { required: true })}
+                                className="w-full px-4 py-2.5 rounded border border-[#EADFC9] bg-[#FBF8F3]/40 text-sm focus:bg-white transition-colors text-[#2E1A0F] outline-none"
+                                placeholder="Scholar Resident"
+                            />
+                            {errors.name && <span className="text-[11px] font-bold text-rose-600 mt-0.5 block">Full name is required.</span>}
+                        </div>
 
-                    <div className="relative">
-                        <input
-                            {...register("password", {
-                                required: "Password is required",
-                                minLength: { value: 8, message: "Password must be at least 8 characters" }
-                            })}
-                            type={showPassword ? "text" : "password"}
-                            placeholder="Password"
-                            className={`input pr-12 ${errors.password ? "border-red-500" : ""}`}
-                        />
-                        <button
-                            type="button"
-                            onClick={() => setShowPassword(!showPassword)}
-                            className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-green-900 cursor-pointer"
-                        >
-                            {showPassword ? <FiEyeOff size={20} /> : <FiEye size={20} />}
-                        </button>
-                        {errors.password && <p className="text-red-500 text-xs mt-1 ml-2">{errors.password.message}</p>}
+                        <div>
+                            <label className="block text-[10px] font-bold text-stone-600 uppercase tracking-wider mb-1">Email Address</label>
+                            <input
+                                type="email"
+                                {...register("email", { required: true })}
+                                className="w-full px-4 py-2.5 rounded border border-[#EADFC9] bg-[#FBF8F3]/40 text-sm focus:bg-white transition-colors text-[#2E1A0F] outline-none"
+                                placeholder="student@university.edu"
+                            />
+                            {errors.email && <span className="text-[11px] font-bold text-rose-600 mt-0.5 block">Email context is required.</span>}
+                        </div>
+
+                        <div>
+                            <label className="block text-[10px] font-bold text-stone-600 uppercase tracking-wider mb-1">Profile Photo URL String</label>
+                            <input
+                                type="url"
+                                {...register("photoURL", { required: true })}
+                                className="w-full px-4 py-2.5 rounded border border-[#EADFC9] bg-[#FBF8F3]/40 text-sm focus:bg-white transition-colors text-[#2E1A0F] outline-none"
+                                placeholder="https://photo..."
+                            />
+                            {errors.photoURL && <span className="text-[11px] font-bold text-rose-600 mt-0.5 block">Image resource link is required.</span>}
+                        </div>
+
+                        <div>
+                            <label className="block text-[10px] font-bold text-stone-600 uppercase tracking-wider mb-1">
+                                Password
+                            </label>
+
+                            <div className="relative flex items-center">
+                                <input
+                                    type={showPassword ? "text" : "password"}
+                                    {...register("password", { required: true })}
+                                    className="w-full px-4 pr-12 py-2.5 rounded border border-[#EADFC9] bg-[#FBF8F3]/40 text-sm focus:bg-white transition-colors text-[#2E1A0F] outline-none"
+                                    placeholder="••••••••"
+                                />
+
+                                <button
+                                    type="button"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    className="absolute right-3 p-1 text-stone-400 hover:text-[#5C2E16] focus:outline-none transition-colors cursor-pointer"
+                                    aria-label={showPassword ? "Hide Password" : "Show Password"}
+                                >
+                                    {showPassword ? (
+                                        <LuEyeOff className="w-4 h-4" />
+                                    ) : (
+                                        <LuEye className="w-4 h-4" />
+                                    )}
+                                </button>
+                            </div>
+
+                            {errors.password && (
+                                <span className="text-[11px] font-bold text-rose-600 mt-0.5 block">
+                                    Password is required.
+                                </span>
+                            )}
+                        </div>
+
+
+                        <div className="pt-2">
+                            <button
+                                type="submit"
+                                className="w-full py-2.5 bg-[#5C2E16] hover:bg-[#42200F] text-[#FBF8F3] font-bold text-xs sm:text-sm uppercase tracking-widest rounded transition-colors flex items-center justify-center gap-1.5 shadow-sm cursor-pointer"
+                            >
+                                <LuUserPlus className="w-4 h-4" />
+                                <span>Register</span>
+                            </button>
+                        </div>
+                    </form>
+
+                    <div className="relative my-3 sm:my-4 flex items-center justify-center">
+                        <div className="absolute w-full border-t border-stone-200"></div>
+                        <span className="relative bg-white px-3 text-[10px] font-bold text-stone-400 uppercase tracking-wider">Or</span>
                     </div>
 
                     <button
-                        type="submit"
-                        disabled={loading}
-                        className="w-full py-4 bg-green-900 text-white rounded-2xl font-bold hover:bg-orange-900 transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                        onClick={handleGoogleRegister}
+                        className="w-full py-2.5 border border-[#EADFC9] text-stone-700 bg-[#FBF8F3]/30 hover:bg-[#FBF8F3] font-bold text-xs sm:text-sm uppercase tracking-widest rounded transition-all flex items-center justify-center gap-1.5 shadow-inner cursor-pointer"
                     >
-                        {loading ? "Creating account..." : "Register Now"}
+                        <FcGoogle className="text-amber-700 text-xs sm:text-sm" />
+                        <span>Sign Up with Google</span>
                     </button>
-                </form>
 
-                <div className="my-8 flex items-center gap-2">
-                    <div className="flex-1 border-t border-gray-100" />
-                    <span className="text-xs text-gray-400">OR</span>
-                    <div className="flex-1 border-t border-gray-100" />
+                    <p className="text-center text-sm font-semibold text-stone-500 mt-5 sm:mt-5">
+                        Already have an account?{" "}
+                        <Link href="/login" className="text-[#5C2E16] font-bold hover:underline tracking-wide">
+                            Login
+                        </Link>
+                    </p>
                 </div>
 
-                <button
-                    type="button"
-                    onClick={handleGoogleLogin}
-                    disabled={loading}
-                    className="w-full flex items-center justify-center gap-3 py-4 border border-gray-200 rounded-2xl font-bold hover:bg-gray-50 transition-colors disabled:opacity-50 cursor-pointer"
-                >
-                    <FcGoogle size={24} />
-                    Sign up with Google
-                </button>
-
-                <p className="text-center mt-8 text-sm text-gray-500">
-                    Already have an account?{" "}
-                    <Link href="/login" className="text-green-900 font-bold hover:underline cursor-pointer">
-                        Login
-                    </Link>
-                </p>
             </div>
-
-            <style jsx>{`
-                .input {
-                    width: 100%;
-                    padding: 14px 20px;
-                    background: #f9fafb;
-                    border-radius: 14px;
-                    outline: none;
-                    font-weight: 500;
-                    border: 1px solid #f3f4f6;
-                    transition: 0.2s;
-                }
-                .input:focus {
-                    border-color: #14532d;
-                    background: white;
-                }
-            `}</style>
-        </main>
+        </div>
     );
 }
