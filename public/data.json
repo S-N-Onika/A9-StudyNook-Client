@@ -1,0 +1,140 @@
+[
+    {
+        "roomName": "The Silent Study Suite",
+        "description": "An absolute zero-noise zone equipped with individual carrels and ergonomic seating, designed for deep academic research and high-concentration studying.",
+        "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ0QqhOu4U9KzxfZLv4cd4MwzdGJbCZOZGhJw&s",
+        "floor": "3rd Floor",
+        "capacity": 1,
+        "hourlyRate": 0.00,
+        "amenities": [
+            "Wi-Fi",
+            "Power Outlets",
+            "Quiet Zone",
+            "Air Conditioning"
+        ]
+    },
+    {
+        "roomName": "Group Study Room A",
+        "description": "A collaborative room for students working together on course projects, featuring a large central table and integrated media sharing capabilities.",
+        "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTn2Y0KdpxlwvmTEUKhrElzKEqxVItV1K33FA&s",
+        "floor": "1st Floor",
+        "capacity": 6,
+        "hourlyRate": 5.00,
+        "amenities": [
+            "Whiteboard",
+            "Wi-Fi",
+            "Power Outlets",
+            "Air Conditioning"
+        ]
+    },
+    {
+        "roomName": "The Digital Media Lab",
+        "description": "A specialized production space with high-end hardware for video editing, graphic design, podcast recording, and interactive digital research projects.",
+        "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTT4mloqZbE-wMRQqSDjDIslQdnfzehQVJj_A&s",
+        "floor": "2nd Floor",
+        "capacity": 4,
+        "hourlyRate": 12.00,
+        "amenities": [
+            "Projector",
+            "Wi-Fi",
+            "Power Outlets",
+            "Quiet Zone",
+            "Air Conditioning"
+        ]
+    },
+    {
+        "roomName": "Rare Books Seminar Room",
+        "description": "A climate-controlled room dedicated to small graduate seminars and the close examination of fragile archival materials and special collections.",
+        "image": "https://harthouse.ca/assets/images/uploads/rooms/Bickersteth_Room/Bickersteth-1.JPG",
+        "floor": "4th Floor",
+        "capacity": 10,
+        "hourlyRate": 25.00,
+        "amenities": [
+            "Wi-Fi",
+            "Quiet Zone",
+            "Air Conditioning"
+        ]
+    },
+    {
+        "roomName": "The Microfilm & Microfiche Hub",
+        "description": "Equipped with specialized digital scan readers to browse historical newspaper archives, micro-prints, and vintage local history document rolls.",
+        "image": "https://storage.googleapis.com/clio-images/medium_1807_Microfilm.jpg",
+        "floor": "Basement",
+        "capacity": 6,
+        "hourlyRate": 0.00,
+        "amenities": [
+            "Wi-Fi",
+            "Power Outlets",
+            "Quiet Zone"
+        ]
+    },
+    {
+        "roomName": "Children's Storytime Alcove",
+        "description": "A colorful, vibrant space for early childhood literacy programs, reading circles, and community-led family interactive learning sessions.",
+        "image": "https://images.stockcake.com/public/c/0/1/c019150a-a310-4b39-b44d-3de1d99958c5_large/enchanting-kids-bedroom-stockcake.jpg",
+        "floor": "Ground Floor",
+        "capacity": 15,
+        "hourlyRate": 0.00,
+        "amenities": [
+            "Whiteboard",
+            "Projector",
+            "Wi-Fi",
+            "Air Conditioning"
+        ]
+    },
+    {
+        "roomName": "The Thesis Defense Theater",
+        "description": "A tiered presentation venue ideal for academic dissertation defenses, local author talks, and scholarly panels open to the public.",
+        "image": "https://apicollege.edu.au/wp-content/uploads/2025/11/Melbourne_class.jpeg",
+        "floor": "2nd Floor",
+        "capacity": 30,
+        "hourlyRate": 40.00,
+        "amenities": [
+            "Projector",
+            "Wi-Fi",
+            "Power Outlets",
+            "Air Conditioning"
+        ]
+    },
+    {
+        "roomName": "Literacy & Tutoring Pod 1",
+        "description": "A small, glass-enclosed space intended for adult literacy coaching, peer-to-peer writing assistance, or language learning sessions.",
+        "image": "https://privacypod.ai/cdn/shop/files/Richardson_Memorial_Library.webp?v=1763651083&width=3000",
+        "floor": "1st Floor",
+        "capacity": 2,
+        "hourlyRate": 0.00,
+        "amenities": [
+            "Whiteboard",
+            "Wi-Fi",
+            "Power Outlets"
+        ]
+    },
+    {
+        "roomName": "The STEM Innovation Workshop",
+        "description": "A makerspace for library patrons containing prototyping materials, collaborative assembly tables, and spaces for structural group workshops.",
+        "image": "https://sblabs.co.uk/wp-content/uploads/2025/10/stem-environment-for-classroom-furniture-lab.webp",
+        "floor": "3rd Floor",
+        "capacity": 8,
+        "hourlyRate": 15.00,
+        "amenities": [
+            "Whiteboard",
+            "Projector",
+            "Wi-Fi",
+            "Power Outlets"
+        ]
+    },
+    {
+        "roomName": "The Local History Archives Room",
+        "description": "A secure room housing regional maps, physical genealogy registries, and historical photo books for community legacy exploration.",
+        "image": "https://www.richwoodlibrary.org/sites/default/files/migrated/Inside%20the%20History%20Room.jpg",
+        "floor": "4th Floor",
+        "capacity": 5,
+        "hourlyRate": 10.00,
+        "amenities": [
+            "Wi-Fi",
+            "Power Outlets",
+            "Quiet Zone",
+            "Air Conditioning"
+        ]
+    }
+]

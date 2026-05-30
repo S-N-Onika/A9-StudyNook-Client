@@ -30,7 +30,7 @@ export default function AllRooms() {
                 if (maxPrice) queryParams.append("maxPrice", maxPrice);
 
                 const response = await axios.get(
-                    `http://localhost:5000/api/rooms?${queryParams.toString()}`
+                    `http://localhost:5000/api/all-rooms?${queryParams.toString()}`
                 );
 
                 setRooms(Array.isArray(response.data) ? response.data : []);

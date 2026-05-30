@@ -26,7 +26,7 @@ export default function Navbar() {
                         </Link>
                         <Link href="/all-rooms" className="">
                             All Rooms
-                        
+
                         </Link>
                         <Link href="/add-room" className="">
                             Add Room

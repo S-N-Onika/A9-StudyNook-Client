@@ -42,7 +42,7 @@ export default function AddRoom() {
             capacity: parseInt(data.capacity),
             hourlyRate: parseFloat(data.hourlyRate),
             amenities: data.amenities || [],
-            ownerName: user?.displayName || "Scholar Resident",
+            // ownerName: user?.displayName || "Scholar Resident",
         };
 
         try {
