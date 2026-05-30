@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Link from "next/link";
+import Image from "next/image";
 import { LuSearch, LuSlidersHorizontal, LuLoader } from "react-icons/lu";
 
 export default function AllRooms() {
@@ -12,8 +13,8 @@ export default function AllRooms() {
     const [selectedAmenities, setSelectedAmenities] = useState([]);
     const [maxPrice, setMaxPrice] = useState(100);
 
-    const amenitiesOptions = [ "Whiteboard", "Projector", "Wi-Fi", "Power Outlets", "Quiet Zone", "Air Conditioning",];
-    
+    const amenitiesOptions = ["Whiteboard", "Projector", "Wi-Fi", "Power Outlets", "Quiet Zone", "Air Conditioning",];
+
     useEffect(() => {
         document.title = "StudyNook - Available Rooms";
     }, []);
@@ -142,13 +143,15 @@ export default function AllRooms() {
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                             {rooms.map((room) => (
                                 <div key={room._id} className="bg-white rounded border border-[#EADFC9] overflow-hidden flex flex-col">
-                                    <img className="h-48 w-full object-cover" src={room.image} alt={room.name} />
+                                    <Image className="h-48 w-full object-cover" src={room.image} alt={room._id}
+                                        width={100}
+                                        height={100} />
 
                                     <div className="p-5 flex flex-col justify-between space-y-4">
                                         <div>
                                             <div className="flex justify-between items-start mb-1">
                                                 <h4 className="font-serif font-bold text-base text-[#2E1A0F] line-clamp-1">
-                                                    {room.name}
+                                                    {room.roomName}
                                                 </h4>
 
                                                 <span className="text-xs font-black text-[#5C2E16] bg-[#FBF8F3] px-2 py-0.5 rounded border">

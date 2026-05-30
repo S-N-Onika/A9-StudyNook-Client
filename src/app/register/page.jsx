@@ -85,7 +85,7 @@ export default function RegisterPage() {
 
                 <div className="hidden md:block relative bg-[#2C1A11] h-full w-full overflow-hidden">
                     <div
-                        className="absolute inset-0 bg-cover bg-center opacity-25 mix-blend-luminosity scale-105"
+                        className="absolute inset-0 bg-cover bg-center opacity-25 mix-blend-luminosity"
                         style={{ backgroundImage: "url('/assets/books.avif')" }}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-[#2C1A11] via-transparent to-transparent z-10" />
