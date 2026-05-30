@@ -169,7 +169,7 @@ export default function AllRooms() {
                                         </div>
 
                                         <Link
-                                            href={`/rooms/${room._id}`}
+                                            href={`/room-details/${room._id}`}
                                             className="block text-center py-2 bg-[#5C2E16] text-[#FBF8F3] font-bold text-xs uppercase tracking-widest rounded"
                                         >
                                             View Details
